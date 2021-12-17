@@ -21,14 +21,27 @@ const ID_HookBody = 10;
 
 const COMMANDS = ["ПОВОРОТ_ОСНОВАНИЕ", "ПОВОРОТ_ТУЛОВИЩЕ", "ПОВОРОТ_ГОЛОВА"];
 
+const MAIN_MAX_VALUE = 30;
+const MAIN_MIN_VALUE = -30;
+const BODY_MAX_VALUE = 35;
+const BODY_MIN_VALUE = -30;
+const HEAD_MAX_VALUE = 20;
+const HEAD_MIN_VALUE = -200;
+
 $(document).ready(function () {
   getForgeToken(function (access_token) {
     jQuery.ajax({
-      url: "https://developer.api.autodesk.com/modelderivative/v2/designdata/" + urn + "/manifest",
+      url:
+        "https://developer.api.autodesk.com/modelderivative/v2/designdata/" +
+        urn +
+        "/manifest",
       headers: { Authorization: "Bearer " + access_token },
       success: function (res) {
         if (res.status === "success") launchViewer(urn);
-        else $("#forgeViewer").html("Преобразование всё ещё выполняется").css("color", "lightblue");
+        else
+          $("#forgeViewer")
+            .html("Преобразование всё ещё выполняется")
+            .css("color", "lightblue");
       },
     });
   });
@@ -41,12 +54,19 @@ function launchViewer(urn) {
   };
 
   Autodesk.Viewing.Initializer(options, () => {
-    viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById("forgeViewer"), {
-      extensions: [],
-    });
+    viewer = new Autodesk.Viewing.GuiViewer3D(
+      document.getElementById("forgeViewer"),
+      {
+        extensions: [],
+      }
+    );
     viewer.start();
     var documentId = "urn:" + urn;
-    Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
+    Autodesk.Viewing.Document.load(
+      documentId,
+      onDocumentLoadSuccess,
+      onDocumentLoadFailure
+    );
   });
 }
 
@@ -54,14 +74,20 @@ function onDocumentLoadSuccess(doc) {
   var viewables = doc.getRoot().getDefaultGeometry();
   console.log(viewables);
   viewer.loadDocumentNode(doc, viewables).then((i) => {
-    viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, setupMyModel);
+    viewer.addEventListener(
+      Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT,
+      setupMyModel
+    );
     // documented loaded, any action?
   });
 }
 
 function onDocumentLoadFailure(viewerErrorCode, viewerErrorMsg) {
   console.error(
-    "onDocumentLoadFailure() - errorCode:" + viewerErrorCode + "\n- errorMessage:" + viewerErrorMsg
+    "onDocumentLoadFailure() - errorCode:" +
+      viewerErrorCode +
+      "\n- errorMessage:" +
+      viewerErrorMsg
   );
 }
 
@@ -104,11 +130,15 @@ function setupMyModel() {
     .matrix[0].getPosition()
     .clone();
   Helper_LowerArmBody.position.x =
-    -Position_LowerArmBody.x + Math.abs(Position_LowerArmBody.x - Pivot_BaseRod.position.x);
+    -Position_LowerArmBody.x +
+    Math.abs(Position_LowerArmBody.x - Pivot_BaseRod.position.x);
   Helper_LowerArmBody.position.y =
-    -Position_LowerArmBody.y + Math.abs(Position_LowerArmBody.y - Pivot_BaseRod.position.y);
+    -Position_LowerArmBody.y +
+    Math.abs(Position_LowerArmBody.y - Pivot_BaseRod.position.y);
   Helper_LowerArmBody.position.z =
-    -Position_LowerArmBody.z + Math.abs(Position_LowerArmBody.z - Pivot_BaseRod.position.z) - 1700;
+    -Position_LowerArmBody.z +
+    Math.abs(Position_LowerArmBody.z - Pivot_BaseRod.position.z) -
+    1700;
   Pivot_BaseRod.add(Helper_LowerArmBody);
 
   // /* ====================== SecondAxis ================= */
@@ -121,9 +151,12 @@ function setupMyModel() {
     .matrix[0].getPosition()
     .clone();
 
-  Pivot_LowerRodBody.position.x = Position_LowerRodBody.x - Pivot_BaseRod.position.x;
-  Pivot_LowerRodBody.position.y = Position_LowerRodBody.y - Pivot_BaseRod.position.y;
-  Pivot_LowerRodBody.position.z = Position_LowerRodBody.z - Pivot_BaseRod.position.z;
+  Pivot_LowerRodBody.position.x =
+    Position_LowerRodBody.x - Pivot_BaseRod.position.x;
+  Pivot_LowerRodBody.position.y =
+    Position_LowerRodBody.y - Pivot_BaseRod.position.y;
+  Pivot_LowerRodBody.position.z =
+    Position_LowerRodBody.z - Pivot_BaseRod.position.z;
   Pivot_BaseRod.add(Pivot_LowerRodBody);
 
   Helper_LowerRodBody = new THREE.Mesh(
@@ -132,13 +165,25 @@ function setupMyModel() {
   );
   Helper_LowerRodBody.position.x =
     -Position_LowerRodBody.x +
-    Math.abs(Position_LowerRodBody.x - Pivot_LowerRodBody.position.x - Pivot_BaseRod.position.x);
+    Math.abs(
+      Position_LowerRodBody.x -
+        Pivot_LowerRodBody.position.x -
+        Pivot_BaseRod.position.x
+    );
   Helper_LowerRodBody.position.y =
     -Position_LowerRodBody.y +
-    Math.abs(Position_LowerRodBody.y - Pivot_LowerRodBody.position.y - Pivot_BaseRod.position.y);
+    Math.abs(
+      Position_LowerRodBody.y -
+        Pivot_LowerRodBody.position.y -
+        Pivot_BaseRod.position.y
+    );
   Helper_LowerRodBody.position.z =
     -Position_LowerRodBody.z +
-    Math.abs(Position_LowerRodBody.z - Pivot_LowerRodBody.position.z - Pivot_BaseRod.position.z);
+    Math.abs(
+      Position_LowerRodBody.z -
+        Pivot_LowerRodBody.position.z -
+        Pivot_BaseRod.position.z
+    );
   Pivot_LowerRodBody.add(Helper_LowerRodBody);
 
   Helper_MiddleArmBody = new THREE.Mesh(
@@ -150,13 +195,25 @@ function setupMyModel() {
     .clone();
   Helper_MiddleArmBody.position.x =
     -Position_MiddleArmBody.x +
-    Math.abs(Position_MiddleArmBody.x - Pivot_LowerRodBody.position.x - Pivot_BaseRod.position.x);
+    Math.abs(
+      Position_MiddleArmBody.x -
+        Pivot_LowerRodBody.position.x -
+        Pivot_BaseRod.position.x
+    );
   Helper_MiddleArmBody.position.y =
     -Position_MiddleArmBody.y +
-    Math.abs(Position_MiddleArmBody.y - Pivot_LowerRodBody.position.y - Pivot_BaseRod.position.y);
+    Math.abs(
+      Position_MiddleArmBody.y -
+        Pivot_LowerRodBody.position.y -
+        Pivot_BaseRod.position.y
+    );
   Helper_MiddleArmBody.position.z =
     -Position_MiddleArmBody.z +
-    Math.abs(Position_MiddleArmBody.z - Pivot_LowerRodBody.position.z - Pivot_BaseRod.position.z);
+    Math.abs(
+      Position_MiddleArmBody.z -
+        Pivot_LowerRodBody.position.z -
+        Pivot_BaseRod.position.z
+    );
   Pivot_LowerRodBody.add(Helper_MiddleArmBody);
 
   Pivot_UpperRodBody = new THREE.Mesh(
@@ -168,11 +225,17 @@ function setupMyModel() {
     .clone();
 
   Pivot_UpperRodBody.position.x =
-    Position_UpperRodBody.x - Pivot_LowerRodBody.position.x - Pivot_BaseRod.position.x;
+    Position_UpperRodBody.x -
+    Pivot_LowerRodBody.position.x -
+    Pivot_BaseRod.position.x;
   Pivot_UpperRodBody.position.y =
-    Position_UpperRodBody.y - Pivot_LowerRodBody.position.y - Pivot_BaseRod.position.y;
+    Position_UpperRodBody.y -
+    Pivot_LowerRodBody.position.y -
+    Pivot_BaseRod.position.y;
   Pivot_UpperRodBody.position.z =
-    Position_UpperRodBody.z - Pivot_LowerRodBody.position.z - Pivot_BaseRod.position.z;
+    Position_UpperRodBody.z -
+    Pivot_LowerRodBody.position.z -
+    Pivot_BaseRod.position.z;
   Pivot_LowerRodBody.add(Pivot_UpperRodBody);
 
   Helper_UpperRodBody = new THREE.Mesh(
@@ -305,7 +368,11 @@ function setupMyModel() {
   var geom = new THREE.BoxGeometry(5000, 5000, 1);
   var material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
   var boxMesh = new THREE.Mesh(geom, material);
-  boxMesh.position.set(-Helper_HookBody.position.x, -Helper_HookBody.position.y, -1000);
+  boxMesh.position.set(
+    -Helper_HookBody.position.x,
+    -Helper_HookBody.position.y,
+    -1000
+  );
 
   if (!viewer.overlays.hasScene("custom-scene")) {
     viewer.overlays.addScene("custom-scene");
@@ -418,26 +485,38 @@ function headPartTranslate(value, fromSlider) {
 }
 
 function onSendCommands() {
-  const textAreaValue = document.getElementById("commands").value.trim().replace(/\n/g, "");
+  const textAreaValue = document
+    .getElementById("commands")
+    .value.trim()
+    .replace(/\n/g, "");
   let commands = textAreaValue.split(";").filter((v) => v !== "");
   console.log(commands);
 
   commands.forEach((command) => {
     const commandTitle = command.substring(0, command.indexOf("("));
+    let commandValue = command.substring(
+      command.indexOf("(") + 1,
+      command.indexOf(")")
+    );
     if (COMMANDS.includes(commandTitle)) {
       switch (commandTitle) {
         //ОСНОВАНИЕ
         case COMMANDS[0]:
-          mainPartTranslate(
-            command.substring(command.indexOf("(") + 1, command.indexOf(")")),
-            false
-          );
+          if (commandValue > MAIN_MAX_VALUE) commandValue = MAIN_MAX_VALUE;
+          if (commandValue < MAIN_MIN_VALUE) commandValue = MAIN_MIN_VALUE;
+          mainPartTranslate(commandValue, false);
           break;
         //ТУЛОВИЩЕ
         case COMMANDS[1]:
+          if (commandValue > BODY_MAX_VALUE) commandValue = BODY_MAX_VALUE;
+          if (commandValue < BODY_MIN_VALUE) commandValue = BODY_MIN_VALUE;
+          bodyPartTranslate(commandValue, false);
           break;
         //ГОЛОВА
         case COMMANDS[2]:
+          if (commandValue > HEAD_MAX_VALUE) commandValue = HEAD_MAX_VALUE;
+          if (commandValue < HEAD_MIN_VALUE) commandValue = HEAD_MIN_VALUE;
+          headPartTranslate(commandValue, false);
           break;
       }
     }
