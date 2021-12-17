@@ -491,4 +491,8 @@ function onClearCommands() {
   mainPartTranslate(0, true);
   bodyPartTranslate(0, true);
   headPartTranslate(0, true);
+  $("#commands").val("");
+  $("#mainAxisSlider").val("0");
+  $("#secondAxisSlider").val("0");
+  $("#thirdAxisSlider").val("0");
 }
