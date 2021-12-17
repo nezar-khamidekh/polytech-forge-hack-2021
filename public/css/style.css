@@ -121,7 +121,6 @@ p {
 }
 
 .button__send {
-  margin-top: 5px;
   color: #fff;
   background-color: #28a745;
   border-color: #28a745;
@@ -138,6 +137,25 @@ p {
   color: #fff;
   background-color: #1e7e34;
   border-color: #1c7430;
+}
+
+.button__clear {
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.button__clear:hover {
+  color: #fff;
+  background-color: #c82333;
+  border-color: #bd2130;
+  text-decoration: none;
+}
+
+.button__clear:active {
+  color: #fff;
+  background-color: #bd2130;
+  border-color: #b21f2d;
 }
 
 .commands__list {
