@@ -19,6 +19,8 @@ const ID_UpperRodBody = 6;
 const ID_UpperArmBody = 5;
 const ID_HookBody = 10;
 
+const COMMANDS = ["ПОВОРОТ_ОСНОВАНИЕ", "ПОВОРОТ_ТУЛОВИЩЕ", "ПОВОРОТ_ГОЛОВА"];
+
 $(document).ready(function () {
   getForgeToken(function (access_token) {
     jQuery.ajax({
@@ -365,8 +367,23 @@ function getFragmentWorldMatrixByNodeId(nodeId) {
 
 function onMainAxisChanged() {
   const rangeInputValue = document.getElementById("mainAxisSlider").value;
+  mainPartTranslate(rangeInputValue, true);
+}
 
-  Pivot_BaseRod.rotation.y = (rangeInputValue * Math.PI) / 180;
+function onSeconsAxisChanged() {
+  const rangeInputValue = document.getElementById("secondAxisSlider").value;
+  bodyPartTranslate(rangeInputValue, true);
+}
+
+function onThirdAxisChanged() {
+  const rangeInputValue = document.getElementById("thirdAxisSlider").value;
+  headPartTranslate(rangeInputValue, true);
+}
+
+function mainPartTranslate(value, fromSlider) {
+  Pivot_BaseRod.rotation.y = fromSlider
+    ? (-value * Math.PI) / 180
+    : (-value * Math.PI) / 180 + Pivot_BaseRod.rotation.y;
   assignTransformations(Helper_LowerArmBody, ID_LowerArmBody);
   assignTransformations(Helper_LowerRodBody, ID_LowerRodBody);
   assignTransformations(Helper_MiddleArmBody, ID_MiddleArmBody);
@@ -377,10 +394,10 @@ function onMainAxisChanged() {
   viewer.impl.sceneUpdated(true);
 }
 
-function onSeconsAxisChanged() {
-  const rangeInputValue = document.getElementById("secondAxisSlider").value;
-
-  Pivot_LowerRodBody.rotation.x = (-rangeInputValue * Math.PI) / 180;
+function bodyPartTranslate(value, fromSlider) {
+  Pivot_LowerRodBody.rotation.x = fromSlider
+    ? (-value * Math.PI) / 180
+    : (-value * Math.PI) / 180 + Pivot_LowerRodBody.rotation.x;
   assignTransformations(Helper_MiddleArmBody, ID_MiddleArmBody);
   assignTransformations(Helper_UpperRodBody, ID_UpperRodBody);
   assignTransformations(Helper_UpperArmBody, ID_UpperArmBody);
@@ -389,13 +406,40 @@ function onSeconsAxisChanged() {
   viewer.impl.sceneUpdated(true);
 }
 
-function onThirdAxisChanged() {
-  const rangeInputValue = document.getElementById("thirdAxisSlider").value;
-
-  Pivot_UpperRodBody.rotation.x = (-rangeInputValue * Math.PI) / 180;
+function headPartTranslate(value, fromSlider) {
+  Pivot_UpperRodBody.rotation.x = fromSlider
+    ? (-value * Math.PI) / 180
+    : (-value * Math.PI) / 180 + Pivot_UpperRodBody.rotation.x;
   assignTransformations(Helper_UpperRodBody, ID_UpperRodBody);
   assignTransformations(Helper_UpperArmBody, ID_UpperArmBody);
   assignTransformations(Helper_HookBody, ID_HookBody);
 
   viewer.impl.sceneUpdated(true);
+}
+
+function onSendCommands() {
+  const textAreaValue = document.getElementById("commands").value.trim().replace(/\n/g, "");
+  let commands = textAreaValue.split(";").filter((v) => v !== "");
+  console.log(commands);
+
+  commands.forEach((command) => {
+    const commandTitle = command.substring(0, command.indexOf("("));
+    if (COMMANDS.includes(commandTitle)) {
+      switch (commandTitle) {
+        //ОСНОВАНИЕ
+        case COMMANDS[0]:
+          mainPartTranslate(
+            command.substring(command.indexOf("(") + 1, command.indexOf(")")),
+            false
+          );
+          break;
+        //ТУЛОВИЩЕ
+        case COMMANDS[1]:
+          break;
+        //ГОЛОВА
+        case COMMANDS[2]:
+          break;
+      }
+    }
+  });
 }
