@@ -1,0 +1,16 @@
+{
+  "name": "forgeproject",
+  "version": "1.0.0",
+  "description": "My first nodejs experience)",
+  "main": "start.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "forge-apis": "^0.8.6",
+    "multer": "^1.4.3"
+  }
+}

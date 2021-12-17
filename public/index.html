@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Autodesk Forge Хакатон 2021</title>
+    <link
+      rel="shortcut icon"
+      href="https://github.com/Autodesk-Forge/learn.forge.viewmodels/raw/master/img/favicon.ico"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Autodesk Forge Viewer files -->
+    <link
+      rel="stylesheet"
+      href="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.min.css"
+      type="text/css"
+    />
+    <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js"></script>
+    <script src="./js/ForgeViewer.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="header">
+        <div class="header__container">
+          <h1 class="header__title">
+            Разработка интерактивного интерфейса по взаимодействию с роботом-манипулятором
+          </h1>
+        </div>
+      </header>
+      <main class="main">
+        <div class="main__container">
+          <div class="viewer__wrapper">
+            <div class="viewer" id="forgeViewer"></div>
+          </div>
+          <div class="tool-panel">
+            <div class="controls">
+              <label for="mainAxisSlider">Main Axis</label>
+              <input
+                class="control"
+                id="mainAxisSlider"
+                type="range"
+                max="30"
+                min="-30"
+                value="0"
+                oninput="onMainAxisChanged()"
+              />
+              <label for="secondAxisSlider">Second Axis</label>
+              <input
+                class="control"
+                id="secondAxisSlider"
+                type="range"
+                max="35"
+                min="-30"
+                value="0"
+                oninput="onSeconsAxisChanged()"
+              />
+              <label for="thirdAxisSlider">Third Axis</label>
+              <input
+                class="control"
+                id="thirdAxisSlider"
+                type="range"
+                max="20"
+                min="-200"
+                value="0"
+                oninput="onThirdAxisChanged()"
+              />
+              <div class="commands">
+                <textarea class="textarea" name="commands" id="commands"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

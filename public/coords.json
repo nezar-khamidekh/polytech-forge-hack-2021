@@ -1,0 +1,120 @@
+{
+"hierarchy" : {
+    "centre" : {
+        "x" : -1531.7778454323443,
+        "y" : -3066.921560568636,
+        "z" : 103.18552620987555
+    },
+    "axis" : {
+        "x" : NumberInt(0),
+        "y" : NumberInt(1),
+        "z" : NumberInt(0)
+    },
+    "angle" : NumberInt(0),
+    "dbId" : NumberInt(12),
+    "bounds" : {
+        "min" : NumberInt(-175),
+        "max" : NumberInt(170)
+    },
+    "children" : [
+        {
+            "centre" : {
+                "x" : -275.46734299564633,
+                "y" : -1282.0783844528128,
+                "z" : 695.3209230147719
+            },
+            "axis" : {
+                "x" : NumberInt(0),
+                "y" : NumberInt(0),
+                "z" : NumberInt(-1)
+            },
+            "angle" : NumberInt(0),
+            "dbId" : NumberInt(13),
+            "bounds" : {
+                "min" : NumberInt(-90),
+                "max" : NumberInt(90)
+            },
+            "children" : [
+                {
+                    "centre" : {
+                        "x" : -274.28775776026066,
+                        "y" : 2544.220316276206,
+                        "z" : 354.98556647844083
+                    },
+                    "axis" : {
+                        "x" : NumberInt(0),
+                        "y" : NumberInt(0),
+                        "z" : NumberInt(-1)
+                    },
+                    "angle" : NumberInt(0),
+                    "dbId" : NumberInt(9),
+                    "bounds" : {
+                        "min" : NumberInt(-180),
+                        "max" : NumberInt(80)
+                    },
+                    "children" : [
+                        {
+                            "centre" : {
+                                "x" : -966.5434561316943,
+                                "y" : 3330.847986354103,
+                                "z" : 79.66191503637081
+                            },
+                            "axis" : {
+                                "x" : NumberInt(1),
+                                "y" : NumberInt(0),
+                                "z" : NumberInt(0)
+                            },
+                            "angle" : NumberInt(0),
+                            "dbId" : NumberInt(14),
+                            "bounds" : {
+                                "min" : NumberInt(-180),
+                                "max" : NumberInt(180)
+                            },
+                            "children" : [
+                                {
+                                    "centre" : {
+                                        "x" : 3217.6120336721715,
+                                        "y" : 3330.9245884187817,
+                                        "z" : 335.48933959375506
+                                    },
+                                    "axis" : {
+                                        "x" : NumberInt(0),
+                                        "y" : NumberInt(0),
+                                        "z" : NumberInt(-1)
+                                    },
+                                    "angle" : NumberInt(0),
+                                    "dbId" : NumberInt(15),
+                                    "bounds" : {
+                                        "min" : NumberInt(-130),
+                                        "max" : NumberInt(130)
+                                    },
+                                    "children" : [
+                                        {
+                                            "centre" : {
+                                                "x" : 3956.6543579385616,
+                                                "y" : 3330.6703223388813,
+                                                "z" : 79.81803179126203
+                                            },
+                                            "axis" : {
+                                                "x" : NumberInt(1),
+                                                "y" : NumberInt(0),
+                                                "z" : NumberInt(0)
+                                            },
+                                            "angle" : NumberInt(0),
+                                            "dbId" : NumberInt(16),
+                                            "bounds" : {
+                                                "min" : NumberInt(-180),
+                                                "max" : NumberInt(180)
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+}
