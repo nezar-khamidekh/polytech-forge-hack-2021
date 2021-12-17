@@ -19,7 +19,7 @@ const ID_UpperRodBody = 6;
 const ID_UpperArmBody = 5;
 const ID_HookBody = 10;
 
-const COMMANDS = ["ПОВОРОТ_ОСНОВАНИЕ", "ПОВОРОТ_ТУЛОВИЩЕ", "ПОВОРОТ_ГОЛОВА"];
+const COMMANDS = ["ПОВОРОТ_ОСНОВАНИЕ", "ПОВОРОТ_ТУЛОВИЩЕ", "ПОВОРОТ_ГОЛОВА", "ПАУЗА"];
 
 const MAIN_MAX_VALUE = 30;
 const MAIN_MIN_VALUE = -30;
@@ -429,44 +429,61 @@ function headPartTranslate(value, fromSlider) {
 }
 
 function onSendCommands() {
+  let withDelay = false;
+
   const textAreaValue = document.getElementById("commands").value.trim().replace(/\n/g, "");
   let commands = textAreaValue.split(";").filter((v) => v !== "");
   console.log(commands);
 
-  commands.forEach((command, index) => {
+  commands.forEach((command) => {
     const commandTitle = command.substring(0, command.indexOf("("));
-    let commandValue = command.substring(command.indexOf("(") + 1, command.indexOf(")"));
-    if (COMMANDS.includes(commandTitle)) {
-      switch (commandTitle) {
-        //ОСНОВАНИЕ
-        case COMMANDS[0]:
-          if (commandValue > MAIN_MAX_VALUE) commandValue = MAIN_MAX_VALUE;
-          if (commandValue < MAIN_MIN_VALUE) commandValue = MAIN_MIN_VALUE;
-          updateWithAnimation(mainPartTranslate, commandValue / TRANSLATE_VALUE_DEVIDER);
-          break;
-        //ТУЛОВИЩЕ
-        case COMMANDS[1]:
-          if (commandValue > BODY_MAX_VALUE) commandValue = BODY_MAX_VALUE;
-          if (commandValue < BODY_MIN_VALUE) commandValue = BODY_MIN_VALUE;
-          updateWithAnimation(bodyPartTranslate, commandValue / TRANSLATE_VALUE_DEVIDER);
-          break;
-        //ГОЛОВА
-        case COMMANDS[2]:
-          if (commandValue > HEAD_MAX_VALUE) commandValue = HEAD_MAX_VALUE;
-          if (commandValue < HEAD_MIN_VALUE) commandValue = HEAD_MIN_VALUE;
-          updateWithAnimation(headPartTranslate, commandValue / TRANSLATE_VALUE_DEVIDER);
-          break;
-      }
+    if (commandTitle === COMMANDS[3]) {
+      withDelay = true;
+      return;
     }
+    if (withDelay) {
+      withDelay = false;
+      setTimeout(() => {
+        handleCommand(command, commandTitle);
+      }, TRANSLATE_TIMEOUT_DUR);
+    } else handleCommand(command, commandTitle);
   });
+}
+
+function handleCommand(command, commandTitle) {
+  let commandValue = command.substring(command.indexOf("(") + 1, command.indexOf(")"));
+  if (COMMANDS.includes(commandTitle)) {
+    switch (commandTitle) {
+      //ОСНОВАНИЕ
+      case COMMANDS[0]:
+        if (commandValue > MAIN_MAX_VALUE) commandValue = MAIN_MAX_VALUE;
+        if (commandValue < MAIN_MIN_VALUE) commandValue = MAIN_MIN_VALUE;
+        updateWithAnimation(mainPartTranslate, commandValue / TRANSLATE_VALUE_DEVIDER);
+        break;
+      //ТУЛОВИЩЕ
+      case COMMANDS[1]:
+        if (commandValue > BODY_MAX_VALUE) commandValue = BODY_MAX_VALUE;
+        if (commandValue < BODY_MIN_VALUE) commandValue = BODY_MIN_VALUE;
+        updateWithAnimation(bodyPartTranslate, commandValue / TRANSLATE_VALUE_DEVIDER);
+        break;
+      //ГОЛОВА
+      case COMMANDS[2]:
+        if (commandValue > HEAD_MAX_VALUE) commandValue = HEAD_MAX_VALUE;
+        if (commandValue < HEAD_MIN_VALUE) commandValue = HEAD_MIN_VALUE;
+        updateWithAnimation(headPartTranslate, commandValue / TRANSLATE_VALUE_DEVIDER);
+        break;
+      default:
+        break;
+    }
+  }
 }
 
 function updateWithAnimation(translateFunction, value) {
   let timer = 0;
   const updateInterval = setInterval(() => {
     timer += TRANSLATE_INTERVAL_DUR / TRANSLATE_VALUE_DEVIDER;
-    if (timer === TRANSLATE_INTERVAL_DUR) clearInterval(updateInterval);
     translateFunction(value, false);
+    if (timer === TRANSLATE_INTERVAL_DUR) clearInterval(updateInterval);
   }, TRANSLATE_INTERVAL_DUR / TRANSLATE_VALUE_DEVIDER);
 }
 
