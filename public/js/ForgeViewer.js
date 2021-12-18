@@ -28,12 +28,7 @@ const ID_UpperRodBody = 6;
 const ID_UpperArmBody = 5;
 const ID_HookBody = 10;
 
-const COMMANDS = [
-  "ПОВОРОТ_ОСНОВАНИЕ",
-  "ПОВОРОТ_ТУЛОВИЩЕ",
-  "ПОВОРОТ_ГОЛОВА",
-  "ПАУЗА",
-];
+const COMMANDS = ["ПОВОРОТ_ОСНОВАНИЕ", "ПОВОРОТ_ТУЛОВИЩЕ", "ПОВОРОТ_ГОЛОВА", "ПАУЗА"];
 
 const MAIN_MAX_VALUE = 30;
 const MAIN_MIN_VALUE = -30;
@@ -43,23 +38,20 @@ const HEAD_MAX_VALUE = 20;
 const HEAD_MIN_VALUE = -200;
 
 const TRANSLATE_VALUE_DEVIDER = 100;
-const TRANSLATE_INTERVAL_DUR = 500;
-const TRANSLATE_TIMEOUT_DUR = 600;
+const TRANSLATE_INTERVAL_DUR = 300;
+const TRANSLATE_TIMEOUT_DUR = 3500;
+
+const PLATE_SIZE = 100;
+const PLATE_COUNT = 100;
 
 $(document).ready(function () {
   getForgeToken(function (access_token) {
     jQuery.ajax({
-      url:
-        "https://developer.api.autodesk.com/modelderivative/v2/designdata/" +
-        urn +
-        "/manifest",
+      url: "https://developer.api.autodesk.com/modelderivative/v2/designdata/" + urn + "/manifest",
       headers: { Authorization: "Bearer " + access_token },
       success: function (res) {
         if (res.status === "success") launchViewer(urn);
-        else
-          $("#forgeViewer")
-            .html("Преобразование всё ещё выполняется")
-            .css("color", "lightblue");
+        else $("#forgeViewer").html("Преобразование всё ещё выполняется").css("color", "lightblue");
       },
     });
   });
@@ -69,22 +61,16 @@ function launchViewer(urn) {
   var options = {
     env: "AutodeskProduction",
     getAccessToken: getForgeToken,
+    progressiveRendering: true,
   };
 
   Autodesk.Viewing.Initializer(options, () => {
-    viewer = new Autodesk.Viewing.GuiViewer3D(
-      document.getElementById("forgeViewer"),
-      {
-        extensions: [],
-      }
-    );
+    viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById("forgeViewer"), {
+      extensions: [],
+    });
     viewer.start();
     var documentId = "urn:" + urn;
-    Autodesk.Viewing.Document.load(
-      documentId,
-      onDocumentLoadSuccess,
-      onDocumentLoadFailure
-    );
+    Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
   });
 }
 
@@ -92,20 +78,14 @@ function onDocumentLoadSuccess(doc) {
   var viewables = doc.getRoot().getDefaultGeometry();
   console.log(viewables);
   viewer.loadDocumentNode(doc, viewables).then((i) => {
-    viewer.addEventListener(
-      Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT,
-      setupMyModel
-    );
+    viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, setupMyModel);
     // documented loaded, any action?
   });
 }
 
 function onDocumentLoadFailure(viewerErrorCode, viewerErrorMsg) {
   console.error(
-    "onDocumentLoadFailure() - errorCode:" +
-      viewerErrorCode +
-      "\n- errorMessage:" +
-      viewerErrorMsg
+    "onDocumentLoadFailure() - errorCode:" + viewerErrorCode + "\n- errorMessage:" + viewerErrorMsg
   );
 }
 
@@ -148,15 +128,11 @@ function setupMyModel() {
     .matrix[0].getPosition()
     .clone();
   Helper_LowerArmBody.position.x =
-    -Position_LowerArmBody.x +
-    Math.abs(Position_LowerArmBody.x - Pivot_BaseRod.position.x);
+    -Position_LowerArmBody.x + Math.abs(Position_LowerArmBody.x - Pivot_BaseRod.position.x);
   Helper_LowerArmBody.position.y =
-    -Position_LowerArmBody.y +
-    Math.abs(Position_LowerArmBody.y - Pivot_BaseRod.position.y);
+    -Position_LowerArmBody.y + Math.abs(Position_LowerArmBody.y - Pivot_BaseRod.position.y);
   Helper_LowerArmBody.position.z =
-    -Position_LowerArmBody.z +
-    Math.abs(Position_LowerArmBody.z - Pivot_BaseRod.position.z) -
-    1700;
+    -Position_LowerArmBody.z + Math.abs(Position_LowerArmBody.z - Pivot_BaseRod.position.z) - 1700;
   Pivot_BaseRod.add(Helper_LowerArmBody);
 
   // /* ====================== SecondAxis ================= */
@@ -169,12 +145,9 @@ function setupMyModel() {
     .matrix[0].getPosition()
     .clone();
 
-  Pivot_LowerRodBody.position.x =
-    Position_LowerRodBody.x - Pivot_BaseRod.position.x;
-  Pivot_LowerRodBody.position.y =
-    Position_LowerRodBody.y - Pivot_BaseRod.position.y;
-  Pivot_LowerRodBody.position.z =
-    Position_LowerRodBody.z - Pivot_BaseRod.position.z;
+  Pivot_LowerRodBody.position.x = Position_LowerRodBody.x - Pivot_BaseRod.position.x;
+  Pivot_LowerRodBody.position.y = Position_LowerRodBody.y - Pivot_BaseRod.position.y;
+  Pivot_LowerRodBody.position.z = Position_LowerRodBody.z - Pivot_BaseRod.position.z;
   Pivot_BaseRod.add(Pivot_LowerRodBody);
 
   Helper_LowerRodBody = new THREE.Mesh(
@@ -183,25 +156,13 @@ function setupMyModel() {
   );
   Helper_LowerRodBody.position.x =
     -Position_LowerRodBody.x +
-    Math.abs(
-      Position_LowerRodBody.x -
-        Pivot_LowerRodBody.position.x -
-        Pivot_BaseRod.position.x
-    );
+    Math.abs(Position_LowerRodBody.x - Pivot_LowerRodBody.position.x - Pivot_BaseRod.position.x);
   Helper_LowerRodBody.position.y =
     -Position_LowerRodBody.y +
-    Math.abs(
-      Position_LowerRodBody.y -
-        Pivot_LowerRodBody.position.y -
-        Pivot_BaseRod.position.y
-    );
+    Math.abs(Position_LowerRodBody.y - Pivot_LowerRodBody.position.y - Pivot_BaseRod.position.y);
   Helper_LowerRodBody.position.z =
     -Position_LowerRodBody.z +
-    Math.abs(
-      Position_LowerRodBody.z -
-        Pivot_LowerRodBody.position.z -
-        Pivot_BaseRod.position.z
-    );
+    Math.abs(Position_LowerRodBody.z - Pivot_LowerRodBody.position.z - Pivot_BaseRod.position.z);
   Pivot_LowerRodBody.add(Helper_LowerRodBody);
 
   Helper_MiddleArmBody = new THREE.Mesh(
@@ -213,25 +174,13 @@ function setupMyModel() {
     .clone();
   Helper_MiddleArmBody.position.x =
     -Position_MiddleArmBody.x +
-    Math.abs(
-      Position_MiddleArmBody.x -
-        Pivot_LowerRodBody.position.x -
-        Pivot_BaseRod.position.x
-    );
+    Math.abs(Position_MiddleArmBody.x - Pivot_LowerRodBody.position.x - Pivot_BaseRod.position.x);
   Helper_MiddleArmBody.position.y =
     -Position_MiddleArmBody.y +
-    Math.abs(
-      Position_MiddleArmBody.y -
-        Pivot_LowerRodBody.position.y -
-        Pivot_BaseRod.position.y
-    );
+    Math.abs(Position_MiddleArmBody.y - Pivot_LowerRodBody.position.y - Pivot_BaseRod.position.y);
   Helper_MiddleArmBody.position.z =
     -Position_MiddleArmBody.z +
-    Math.abs(
-      Position_MiddleArmBody.z -
-        Pivot_LowerRodBody.position.z -
-        Pivot_BaseRod.position.z
-    );
+    Math.abs(Position_MiddleArmBody.z - Pivot_LowerRodBody.position.z - Pivot_BaseRod.position.z);
   Pivot_LowerRodBody.add(Helper_MiddleArmBody);
 
   Pivot_UpperRodBody = new THREE.Mesh(
@@ -243,17 +192,11 @@ function setupMyModel() {
     .clone();
 
   Pivot_UpperRodBody.position.x =
-    Position_UpperRodBody.x -
-    Pivot_LowerRodBody.position.x -
-    Pivot_BaseRod.position.x;
+    Position_UpperRodBody.x - Pivot_LowerRodBody.position.x - Pivot_BaseRod.position.x;
   Pivot_UpperRodBody.position.y =
-    Position_UpperRodBody.y -
-    Pivot_LowerRodBody.position.y -
-    Pivot_BaseRod.position.y;
+    Position_UpperRodBody.y - Pivot_LowerRodBody.position.y - Pivot_BaseRod.position.y;
   Pivot_UpperRodBody.position.z =
-    Position_UpperRodBody.z -
-    Pivot_LowerRodBody.position.z -
-    Pivot_BaseRod.position.z;
+    Position_UpperRodBody.z - Pivot_LowerRodBody.position.z - Pivot_BaseRod.position.z;
   Pivot_LowerRodBody.add(Pivot_UpperRodBody);
 
   Helper_UpperRodBody = new THREE.Mesh(
@@ -384,34 +327,27 @@ function setupMyModel() {
   Pivot_HookBody.add(Helper_HookBody);
 
   plateGroup = new THREE.Group();
-  const geom = new THREE.BoxGeometry(100, 100, 1);
-  const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-  for (let i = 0; i < 100; i++) {
-    for (let k = 0; k < 100; k++) {
-      let plate = new THREE.Mesh(geom, material.clone());
-      plate.position.set(-5000 + 100 * i, -5000 + 100 * k, 0);
+  const geom = new THREE.BoxGeometry(PLATE_SIZE, PLATE_SIZE, 1);
+  const material = new THREE.MeshBasicMaterial({ color: 0x8c8c8c });
+  for (let i = 0; i < PLATE_COUNT; i++) {
+    for (let k = 0; k < PLATE_COUNT; k++) {
+      let plate = new THREE.Mesh(geom, material);
+      plate.position.set(
+        (-PLATE_SIZE * PLATE_SIZE) / 2 + PLATE_SIZE * i,
+        (-PLATE_SIZE * PLATE_SIZE) / 2 + PLATE_SIZE * k,
+        0
+      );
       plateGroup.add(plate);
     }
   }
 
-  plateGroup.position.set(
-    -Helper_HookBody.position.x,
-    -Helper_HookBody.position.y,
-    -1000
-  );
+  plateGroup.position.set(-Helper_HookBody.position.x, -Helper_HookBody.position.y, -1000);
 
   if (!viewer.overlays.hasScene("custom-scene")) {
     viewer.overlays.addScene("custom-scene");
   }
 
   viewer.overlays.addMesh(plateGroup, "custom-scene");
-
-  //group = new THREE.Object3D();
-  // group.add(boxMesh);
-  // viewer.scene.add(group);
-  // viewer.impl.scene.add(group);
-  // viewer.overlays.addMesh(group, "custom-scene");
-
   rayCasterDirection = new THREE.Vector3(0, 0, 1);
   raycast = new THREE.Raycaster(new THREE.Vector3(0, 0, 0), rayCasterDirection);
 
@@ -421,7 +357,6 @@ function setupMyModel() {
   assignTransformations(Helper_UpperRodBody, ID_UpperRodBody);
   assignTransformations(Helper_UpperArmBody, ID_UpperArmBody);
   assignTransformations(Helper_HookBody, ID_HookBody);
-  // console.log(rayCasterOrigin);
 }
 
 function assignTransformations(refererence_dummy, nodeId) {
@@ -432,38 +367,17 @@ function assignTransformations(refererence_dummy, nodeId) {
   refererence_dummy.matrixWorld.decompose(position, rotation, scale);
 
   if (nodeId === ID_HookBody) {
-    p1 = getFragmentWorldMatrixByNodeId(ID_UpperRodBody)
-      .matrix[0].getPosition()
-      .clone();
-    p2 = getFragmentWorldMatrixByNodeId(ID_HookBody)
-      .matrix[0].getPosition()
-      .clone();
+    p1 = getFragmentWorldMatrixByNodeId(ID_UpperRodBody).matrix[0].getPosition().clone();
+    p2 = getFragmentWorldMatrixByNodeId(ID_HookBody).matrix[0].getPosition().clone();
     rayCasterDirection.set(p2.x - p1.x, p2.y - p1.y, p2.z - p1.z);
     rayCasterDirection.normalize();
     raycast.set(p1, rayCasterDirection);
-    // console.log(raycast);
-    // tempmesh = new THREE.Mesh(
-    //   new THREE.BoxGeometry(200, 200, 200),
-    //   new THREE.MeshBasicMaterial({ color: 0xffff00 })
-    // );
-    // tempmesh.position.set(
-    //   rayCasterDirection.x * 1000,
-    //   rayCasterDirection.y * 1000,
-    //   rayCasterDirection.z * 1000
-    // );
-    // console.log(rayCasterDirection);
-    // viewer.overlays.addMesh(tempmesh, "custom-scene");
-    // var tempmesh2 = new THREE.Mesh(
-    //   new THREE.BoxGeometry(200, 200, 200),
-    //   new THREE.MeshBasicMaterial({ color: 0x11ff22 })
-    // );
-    // tempmesh2.position.set(p1.x, p1.y, p1.z);
-    // viewer.overlays.addMesh(tempmesh2, "custom-scene");
     const intersects = raycast.intersectObject(plateGroup, true);
+    const material = new THREE.MeshBasicMaterial({ color: 0x000000 });
     intersects.forEach((el) => {
-      el.object.material.color.setHex(0x000000);
+      el.object.material = material;
     });
-    console.log(intersects);
+    viewer.impl.sceneUpdated(true, false);
   }
   tree.enumNodeFragments(nodeId, function (frag) {
     var fragProxy = viewer.impl.getFragmentProxy(viewer.model, frag);
@@ -558,12 +472,8 @@ function headPartTranslate(value, fromSlider) {
 function onSendCommands() {
   let withDelay = false;
 
-  const textAreaValue = document
-    .getElementById("commands")
-    .value.trim()
-    .replace(/\n/g, "");
+  const textAreaValue = document.getElementById("commands").value.trim().replace(/\n/g, "");
   let commands = textAreaValue.split(";").filter((v) => v !== "");
-  console.log(commands);
 
   commands.forEach((command) => {
     const commandTitle = command.substring(0, command.indexOf("("));
@@ -581,38 +491,26 @@ function onSendCommands() {
 }
 
 function handleCommand(command, commandTitle) {
-  let commandValue = command.substring(
-    command.indexOf("(") + 1,
-    command.indexOf(")")
-  );
+  let commandValue = command.substring(command.indexOf("(") + 1, command.indexOf(")"));
   if (COMMANDS.includes(commandTitle)) {
     switch (commandTitle) {
       //ОСНОВАНИЕ
       case COMMANDS[0]:
         if (commandValue > MAIN_MAX_VALUE) commandValue = MAIN_MAX_VALUE;
         if (commandValue < MAIN_MIN_VALUE) commandValue = MAIN_MIN_VALUE;
-        updateWithAnimation(
-          mainPartTranslate,
-          commandValue / TRANSLATE_VALUE_DEVIDER
-        );
+        updateWithAnimation(mainPartTranslate, commandValue / TRANSLATE_VALUE_DEVIDER);
         break;
       //ТУЛОВИЩЕ
       case COMMANDS[1]:
         if (commandValue > BODY_MAX_VALUE) commandValue = BODY_MAX_VALUE;
         if (commandValue < BODY_MIN_VALUE) commandValue = BODY_MIN_VALUE;
-        updateWithAnimation(
-          bodyPartTranslate,
-          commandValue / TRANSLATE_VALUE_DEVIDER
-        );
+        updateWithAnimation(bodyPartTranslate, commandValue / TRANSLATE_VALUE_DEVIDER);
         break;
       //ГОЛОВА
       case COMMANDS[2]:
         if (commandValue > HEAD_MAX_VALUE) commandValue = HEAD_MAX_VALUE;
         if (commandValue < HEAD_MIN_VALUE) commandValue = HEAD_MIN_VALUE;
-        updateWithAnimation(
-          headPartTranslate,
-          commandValue / TRANSLATE_VALUE_DEVIDER
-        );
+        updateWithAnimation(headPartTranslate, commandValue / TRANSLATE_VALUE_DEVIDER);
         break;
       default:
         break;
