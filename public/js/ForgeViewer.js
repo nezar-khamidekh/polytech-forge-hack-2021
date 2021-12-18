@@ -18,6 +18,7 @@ var rayCasterDirection;
 var raycast;
 var p1;
 var p2;
+var plateGroup;
 
 const ID_BaseRod = 3;
 const ID_LowerArmBody = 4;
@@ -41,7 +42,7 @@ const BODY_MIN_VALUE = -30;
 const HEAD_MAX_VALUE = 20;
 const HEAD_MIN_VALUE = -200;
 
-const TRANSLATE_VALUE_DEVIDER = 50;
+const TRANSLATE_VALUE_DEVIDER = 100;
 const TRANSLATE_INTERVAL_DUR = 500;
 const TRANSLATE_TIMEOUT_DUR = 600;
 
@@ -382,10 +383,18 @@ function setupMyModel() {
     );
   Pivot_HookBody.add(Helper_HookBody);
 
-  var geom = new THREE.BoxGeometry(5000, 5000, 1);
-  var material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-  boxMesh = new THREE.Mesh(geom, material.clone());
-  boxMesh.position.set(
+  plateGroup = new THREE.Group();
+  const geom = new THREE.BoxGeometry(100, 100, 1);
+  const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+  for (let i = 0; i < 100; i++) {
+    for (let k = 0; k < 100; k++) {
+      let plate = new THREE.Mesh(geom, material.clone());
+      plate.position.set(-5000 + 100 * i, -5000 + 100 * k, 0);
+      plateGroup.add(plate);
+    }
+  }
+
+  plateGroup.position.set(
     -Helper_HookBody.position.x,
     -Helper_HookBody.position.y,
     -1000
@@ -395,7 +404,7 @@ function setupMyModel() {
     viewer.overlays.addScene("custom-scene");
   }
 
-  viewer.overlays.addMesh(boxMesh, "custom-scene");
+  viewer.overlays.addMesh(plateGroup, "custom-scene");
 
   //group = new THREE.Object3D();
   // group.add(boxMesh);
@@ -450,8 +459,11 @@ function assignTransformations(refererence_dummy, nodeId) {
     // );
     // tempmesh2.position.set(p1.x, p1.y, p1.z);
     // viewer.overlays.addMesh(tempmesh2, "custom-scene");
-    const intersects = raycast.intersectObject(boxMesh);
-    console.log("Пересекается?: " + intersects.length);
+    const intersects = raycast.intersectObject(plateGroup, true);
+    intersects.forEach((el) => {
+      el.object.material.color.setHex(0x000000);
+    });
+    console.log(intersects);
   }
   tree.enumNodeFragments(nodeId, function (frag) {
     var fragProxy = viewer.impl.getFragmentProxy(viewer.model, frag);

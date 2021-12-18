@@ -31,7 +31,8 @@
       <header class="header">
         <div class="header__container">
           <h1 class="header__title">
-            Разработка интерактивного интерфейса по взаимодействию с роботом-манипулятором
+            Разработка интерактивного интерфейса по взаимодействию с
+            роботом-манипулятором
           </h1>
         </div>
       </header>
@@ -49,6 +50,7 @@
                 type="range"
                 max="30"
                 min="-30"
+                step="0.1"
                 value="0"
                 oninput="onMainAxisChanged()"
               />
@@ -59,6 +61,7 @@
                 type="range"
                 max="35"
                 min="-30"
+                step="0.1"
                 value="0"
                 oninput="onSeconsAxisChanged()"
               />
@@ -70,16 +73,33 @@
                 max="20"
                 min="-200"
                 value="0"
+                step="0.1"
                 oninput="onThirdAxisChanged()"
               />
               <div class="commands">
                 <div class="commands__tools">
-                  <textarea class="textarea" name="commands" id="commands"></textarea>
-                  <button class="button button__send" onclick="onSendCommands()">Отправить</button>
-                  <button class="button button__clear" onclick="onClearCommands()">Сбросить</button>
+                  <textarea
+                    class="textarea"
+                    name="commands"
+                    id="commands"
+                  ></textarea>
+                  <button
+                    class="button button__send"
+                    onclick="onSendCommands()"
+                  >
+                    Отправить
+                  </button>
+                  <button
+                    class="button button__clear"
+                    onclick="onClearCommands()"
+                  >
+                    Сбросить
+                  </button>
                 </div>
                 <div class="commands__list">
-                  <p class="commands__text commands__text_bold">Список команд:</p>
+                  <p class="commands__text commands__text_bold">
+                    Список команд:
+                  </p>
                   <p class="commands__text">ПОВОРОТ_ОСНОВАНИЕ();</p>
                   <p class="commands__text">ПОВОРОТ_ТУЛОВИЩЕ();</p>
                   <p class="commands__text">ПОВОРОТ_ГОЛОВА();</p>
