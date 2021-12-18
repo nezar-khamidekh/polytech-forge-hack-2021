@@ -31,8 +31,7 @@
       <header class="header">
         <div class="header__container">
           <h1 class="header__title">
-            Разработка интерактивного интерфейса по взаимодействию с
-            роботом-манипулятором
+            Разработка интерактивного интерфейса по взаимодействию с роботом-манипулятором
           </h1>
         </div>
       </header>
@@ -43,7 +42,7 @@
           </div>
           <div class="tool-panel">
             <div class="controls">
-              <label for="mainAxisSlider">Main Axis</label>
+              <label for="mainAxisSlider">Ось основания</label>
               <input
                 class="control"
                 id="mainAxisSlider"
@@ -54,7 +53,7 @@
                 value="0"
                 oninput="onMainAxisChanged()"
               />
-              <label for="secondAxisSlider">Second Axis</label>
+              <label for="secondAxisSlider">Ось туловища</label>
               <input
                 class="control"
                 id="secondAxisSlider"
@@ -65,7 +64,7 @@
                 value="0"
                 oninput="onSeconsAxisChanged()"
               />
-              <label for="thirdAxisSlider">Third Axis</label>
+              <label for="thirdAxisSlider">Ось головы</label>
               <input
                 class="control"
                 id="thirdAxisSlider"
@@ -78,33 +77,17 @@
               />
               <div class="commands">
                 <div class="commands__tools">
-                  <textarea
-                    class="textarea"
-                    name="commands"
-                    id="commands"
-                  ></textarea>
-                  <button
-                    class="button button__send"
-                    onclick="onSendCommands()"
-                  >
-                    Выполнить
-                  </button>
-                  <button
-                    class="button button__clear"
-                    onclick="onClearCommands()"
-                  >
-                    Сбросить
-                  </button>
+                  <textarea class="textarea" name="commands" id="commands"></textarea>
+                  <button class="button button__send" onclick="onSendCommands()">Выполнить</button>
+                  <button class="button button__clear" onclick="onClearCommands()">Сбросить</button>
                 </div>
                 <div class="commands__list">
-                  <p class="commands__text commands__text_bold">
-                    Список команд:
-                  </p>
+                  <p class="commands__text commands__text_bold">Список команд:</p>
                   <p class="commands__text">ПОВОРОТ_ОСНОВАНИЕ(угол); диапазон [-60; 60]</p>
                   <p class="commands__text">ПОВОРОТ_ТУЛОВИЩЕ(угол); диапазон [-60; 70]</p>
                   <p class="commands__text">ПОВОРОТ_ГОЛОВА(угол); диапазон [-200; 40]</p>
                   <p class="commands__text">ПАУЗА();</p>
-                  <p class="commands__text">ПРЯМОУГОЛЬНИК();</p>
+                  <p class="commands__text">ПРЯМОУГОЛЬНИК(длина, ширина);</p>
                 </div>
               </div>
             </div>
