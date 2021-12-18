@@ -48,8 +48,8 @@
                 class="control"
                 id="mainAxisSlider"
                 type="range"
-                max="30"
-                min="-30"
+                max="60"
+                min="-60"
                 step="0.1"
                 value="0"
                 oninput="onMainAxisChanged()"
@@ -59,8 +59,8 @@
                 class="control"
                 id="secondAxisSlider"
                 type="range"
-                max="35"
-                min="-30"
+                max="70"
+                min="-60"
                 step="0.1"
                 value="0"
                 oninput="onSeconsAxisChanged()"
@@ -70,7 +70,7 @@
                 class="control"
                 id="thirdAxisSlider"
                 type="range"
-                max="20"
+                max="40"
                 min="-200"
                 value="0"
                 step="0.1"
@@ -100,10 +100,11 @@
                   <p class="commands__text commands__text_bold">
                     Список команд:
                   </p>
-                  <p class="commands__text">ПОВОРОТ_ОСНОВАНИЕ(); RANGE=[-30; 30]</p>
-                  <p class="commands__text">ПОВОРОТ_ТУЛОВИЩЕ(); RANGE=[-30; 35]</p>
-                  <p class="commands__text">ПОВОРОТ_ГОЛОВА(); RANGE=[-200; 20]</p>
+                  <p class="commands__text">ПОВОРОТ_ОСНОВАНИЕ(угол); диапазон [-60; 60]</p>
+                  <p class="commands__text">ПОВОРОТ_ТУЛОВИЩЕ(угол); диапазон [-60; 70]</p>
+                  <p class="commands__text">ПОВОРОТ_ГОЛОВА(угол); диапазон [-200; 40]</p>
                   <p class="commands__text">ПАУЗА();</p>
+                  <p class="commands__text">ПРЯМОУГОЛЬНИК();</p>
                 </div>
               </div>
             </div>

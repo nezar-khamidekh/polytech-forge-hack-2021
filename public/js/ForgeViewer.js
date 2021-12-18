@@ -33,13 +33,14 @@ const COMMANDS = [
   "ПОВОРОТ_ТУЛОВИЩЕ",
   "ПОВОРОТ_ГОЛОВА",
   "ПАУЗА",
+  "ПРЯМОУГОЛЬНИК",
 ];
 
-const MAIN_MAX_VALUE = 30;
-const MAIN_MIN_VALUE = -30;
-const BODY_MAX_VALUE = 35;
-const BODY_MIN_VALUE = -30;
-const HEAD_MAX_VALUE = 20;
+const MAIN_MAX_VALUE = 60;
+const MAIN_MIN_VALUE = -60;
+const BODY_MAX_VALUE = 70;
+const BODY_MIN_VALUE = -60;
+const HEAD_MAX_VALUE = 40;
 const HEAD_MIN_VALUE = -200;
 
 const TRANSLATE_VALUE_DEVIDER = 100;
@@ -537,15 +538,19 @@ function headPartTranslate(value, fromSlider) {
   viewer.impl.sceneUpdated(true);
 }
 
-function onSendCommands() {
+function onSendCommands(actionCommands) {
   let withDelay = false;
   let pauseCount = 0;
 
-  const textAreaValue = document
-    .getElementById("commands")
-    .value.trim()
-    .replace(/\n/g, "");
-  let commands = textAreaValue.split(";").filter((v) => v !== "");
+  let commands;
+  if (actionCommands) commands = actionCommands;
+  else {
+    const textAreaValue = document
+      .getElementById("commands")
+      .value.trim()
+      .replace(/\n/g, "");
+    commands = textAreaValue.split(";").filter((v) => v !== "");
+  }
 
   commands.forEach((command) => {
     const commandTitle = command.substring(0, command.indexOf("("));
@@ -595,6 +600,25 @@ function handleCommand(command, commandTitle) {
           headPartTranslate,
           commandValue / TRANSLATE_VALUE_DEVIDER
         );
+        break;
+      //ПРЯМОУГОЛЬНИК
+      case COMMANDS[4]:
+        const commands = [
+          "ПОВОРОТ_ОСНОВАНИЕ(-20)",
+          "ПАУЗА()",
+          "ПОВОРОТ_ТУЛОВИЩЕ(-25)",
+          "ПАУЗА()",
+          "ПОВОРОТ_ОСНОВАНИЕ(20)",
+          "ПОВОРОТ_ГОЛОВА(-1.5)",
+          "ПАУЗА()",
+          "ПОВОРОТ_ОСНОВАНИЕ(20)",
+          "ПОВОРОТ_ГОЛОВА(1.5)",
+          "ПАУЗА()",
+          "ПОВОРОТ_ТУЛОВИЩЕ(25)",
+          "ПАУЗА()",
+          "ПОВОРОТ_ОСНОВАНИЕ(-20)",
+        ];
+        onSendCommands(commands);
         break;
       default:
         break;
