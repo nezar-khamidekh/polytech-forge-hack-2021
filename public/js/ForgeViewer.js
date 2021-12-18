@@ -373,11 +373,11 @@ function assignTransformations(refererence_dummy, nodeId) {
     rayCasterDirection.normalize();
     raycast.set(p1, rayCasterDirection);
     const intersects = raycast.intersectObject(plateGroup, true);
-    const material = new THREE.MeshBasicMaterial({ color: 0x000000 });
+    const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
     intersects.forEach((el) => {
       el.object.material = material;
     });
-    viewer.impl.sceneUpdated(true, false);
+    viewer.impl.sceneUpdated(true);
   }
   tree.enumNodeFragments(nodeId, function (frag) {
     var fragProxy = viewer.impl.getFragmentProxy(viewer.model, frag);
@@ -443,7 +443,6 @@ function mainPartTranslate(value, fromSlider) {
   assignTransformations(Helper_HookBody, ID_HookBody);
 
   viewer.impl.sceneUpdated(true);
-  viewer.overlays.impl.sceneUpdated(true);
 }
 
 function bodyPartTranslate(value, fromSlider) {
@@ -471,6 +470,7 @@ function headPartTranslate(value, fromSlider) {
 
 function onSendCommands() {
   let withDelay = false;
+  let pauseCount = 0;
 
   const textAreaValue = document.getElementById("commands").value.trim().replace(/\n/g, "");
   let commands = textAreaValue.split(";").filter((v) => v !== "");
@@ -479,13 +479,14 @@ function onSendCommands() {
     const commandTitle = command.substring(0, command.indexOf("("));
     if (commandTitle === COMMANDS[3]) {
       withDelay = true;
+      pauseCount++;
       return;
     }
     if (withDelay) {
       withDelay = false;
       setTimeout(() => {
         handleCommand(command, commandTitle);
-      }, TRANSLATE_TIMEOUT_DUR);
+      }, TRANSLATE_TIMEOUT_DUR * pauseCount + 1);
     } else handleCommand(command, commandTitle);
   });
 }
@@ -535,4 +536,9 @@ function onClearCommands() {
   $("#mainAxisSlider").val("0");
   $("#secondAxisSlider").val("0");
   $("#thirdAxisSlider").val("0");
+  const material = new THREE.MeshBasicMaterial({ color: 0x8c8c8c });
+  plateGroup.children.forEach((el) => {
+    el.material = material;
+  });
+  viewer.impl.sceneUpdated(true);
 }
