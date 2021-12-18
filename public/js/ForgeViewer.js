@@ -39,7 +39,7 @@ const HEAD_MIN_VALUE = -200;
 
 const TRANSLATE_VALUE_DEVIDER = 100;
 const TRANSLATE_INTERVAL_DUR = 300;
-const TRANSLATE_TIMEOUT_DUR = 3500;
+const TRANSLATE_TIMEOUT_DUR = 4000;
 
 const PLATE_SIZE = 100;
 const PLATE_COUNT = 100;
@@ -483,7 +483,6 @@ function onSendCommands() {
       return;
     }
     if (withDelay) {
-      withDelay = false;
       setTimeout(() => {
         handleCommand(command, commandTitle);
       }, TRANSLATE_TIMEOUT_DUR * pauseCount + 1);
